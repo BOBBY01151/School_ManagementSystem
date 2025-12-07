@@ -12,13 +12,20 @@ export default function Login() {
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const { loading, error, isAuthenticated } = useSelector((state) => state.auth)
+  const { loading, error, isAuthenticated, user } = useSelector((state) => state.auth)
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate('/dashboard')
+      // Wait for user data to load
+      if (user) {
+        if (user.role === 'admin') {
+          navigate('/admin/dashboard', { replace: true })
+        } else {
+          navigate('/dashboard', { replace: true })
+        }
+      }
     }
-  }, [isAuthenticated, navigate])
+  }, [isAuthenticated, user, navigate])
 
   useEffect(() => {
     dispatch(clearError())

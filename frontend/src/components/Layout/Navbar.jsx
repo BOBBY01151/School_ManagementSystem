@@ -15,13 +15,10 @@ export default function Navbar() {
 
   const roleLinks = {
     admin: [
-      { path: '/dashboard', label: 'Dashboard' },
-      { path: '/students', label: 'Students' },
-      { path: '/classes', label: 'Classes' },
-      { path: '/teachers', label: 'Teachers' },
-      { path: '/attendance', label: 'Attendance' },
-      { path: '/marks', label: 'Marks' },
-      { path: '/notices', label: 'Notices' },
+      { path: '/admin/dashboard', label: 'Dashboard' },
+      { path: '/admin/students', label: 'Students' },
+      { path: '/admin/teachers', label: 'Teachers' },
+      { path: '/admin/classes', label: 'Classes' },
     ],
     teacher: [
       { path: '/dashboard', label: 'Dashboard' },
@@ -53,7 +50,10 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex">
-            <Link to="/dashboard" className="flex items-center px-2 py-2 text-xl font-bold text-primary-600">
+            <Link 
+              to={user?.role === 'admin' ? '/admin/dashboard' : '/dashboard'} 
+              className="flex items-center px-2 py-2 text-xl font-bold text-primary-600"
+            >
               Ananda Central College SMS
             </Link>
             <div className="hidden sm:ml-6 sm:flex sm:space-x-8">

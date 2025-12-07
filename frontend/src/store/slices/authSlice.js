@@ -54,6 +54,7 @@ const initialState = {
   token: localStorage.getItem('token') || null,
   isAuthenticated: false,
   loading: false,
+  initialLoading: true, // Track initial auth check
   error: null,
 }
 
@@ -65,10 +66,14 @@ const authSlice = createSlice({
       state.user = null
       state.token = null
       state.isAuthenticated = false
+      state.initialLoading = false
       localStorage.removeItem('token')
     },
     clearError: (state) => {
       state.error = null
+    },
+    setInitialLoading: (state, action) => {
+      state.initialLoading = action.payload
     },
   },
   extraReducers: (builder) => {
@@ -104,18 +109,23 @@ const authSlice = createSlice({
         state.error = action.payload
       })
       // Get current user
+      .addCase(getCurrentUser.pending, (state) => {
+        state.initialLoading = true
+      })
       .addCase(getCurrentUser.fulfilled, (state, action) => {
         state.user = action.payload
         state.isAuthenticated = true
+        state.initialLoading = false
       })
       .addCase(getCurrentUser.rejected, (state) => {
         state.isAuthenticated = false
         state.token = null
+        state.initialLoading = false
         localStorage.removeItem('token')
       })
   },
 })
 
-export const { logout, clearError } = authSlice.actions
+export const { logout, clearError, setInitialLoading } = authSlice.actions
 export default authSlice.reducer
 
